@@ -1,7 +1,7 @@
-package culturoteca.repository;
+package culturemedia.repository;
 
 import java.util.List;
-import culturoteca.model.Video;
+import culturemedia.model.Video;
 
 public interface VideoRepository {
     List<Video> findAll();
