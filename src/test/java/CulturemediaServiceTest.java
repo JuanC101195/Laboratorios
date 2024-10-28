@@ -45,4 +45,27 @@ class VideoRepositoryTest {
     hould_be_thrown_successfully() {
         assert (false);
     }
+
+    @Test
+    void when_FindByTitle_does_not_find_any_video_an_VideoNotFoundException_should_be_thrown_successfully() {
+        when(videoRepository.find("Inexistente")).thenReturn(Collections.emptyList());
+
+        Executable executable = () -> culturemediaService.findByTitle("Inexistente");
+        assertThrows(VideoNotFoundException.class, executable, "No videos found with title: Inexistente");
+    }
+    @Test
+    void when_FindByDuration_does_not_find_any_video_an_VideoNotFoundException_should_be_thrown_successfully() {
+        when(videoRepository.find(6.0, 7.0)).thenReturn(Collections.emptyList());
+
+        Executable executable = () -> culturemediaService.findByDuration(6.0, 7.0);
+        assertThrows(VideoNotFoundException.class, executable, "No videos found with duration between 6.0 and 7.0");
+    }
+    @Test
+    void when_FindAll_does_not_find_any_video_an_VideoNotFoundException_should_be_thrown_successfully() {
+        when(videoRepository.findAll()).thenReturn(Collections.emptyList());
+
+        Executable executable = () -> culturemediaService.findAll();
+        assertThrows(VideoNotFoundException.class, executable, "No videos found.");
+    }
 }
+
