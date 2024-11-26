@@ -1,17 +1,17 @@
-package culturoteca.controllers;
+package culturemedia.controller;
 
 import java.util.*;
 
-import culturoteca.exception.VideoNotFoundException;
-import culturoteca.model.Video;
-import culturoteca.service.impl.CultureMediaServiceImpl;
+import culturemedia.exception.VideoNotFoundException;
 
+import culturemedia.service.Impl.CulturemediaServiceImpl;
+import culturemedia.model.Video;
 public class CultureMediaController {
 
-    private final CultureMediaServiceImpl cultureMediaService;
+    private final CulturemediaServiceImpl cultureMediaService;
 
 
-    public CultureMediaController(CultureMediaServiceImpl cultureMediaService) {
+    public CultureMediaController(CulturemediaServiceImpl cultureMediaService) {
         this.cultureMediaService = cultureMediaService;
     }
 

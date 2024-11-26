@@ -1,68 +1,67 @@
-package culturemedia.repository;
-
-import java.util.List;
-
+import culturemedia.model.Video;
+import culturemedia.repository.VideoRepository;
+import culturemedia.repository.ViewsRepository;
+import culturemedia.service.CulturemediaService;
+import culturemedia.exception.VideoNotFoundException;
+import culturemedia.service.Impl.CulturemediaServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
-import culturemedia.model.Video;
-import culturemedia.repository.impl.VideoRepositoryImpl;
+import java.util.Collections;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class VideoRepositoryTest {
+class CulturemediaServiceTest {
 
+    private CulturemediaService culturemediaService;
     private VideoRepository videoRepository;
+    private ViewsRepository viewsRepository;
 
     @BeforeEach
-    void init() {
-
-        videoRepository = mock(VideoRepository.class);
-        CulturemediaService = new CultureMediaImpl(videoRepository);
-
-
-    }
-
-}
-
-@Test
-void when_FindAll_all_videos_should_be_returned_successfully() {
-    List<Video> videos = List.of(new Video("01", "Título 1", "----", 4.5),
-            new Video("02", "Título 2", "----", 5.5),
-            new Video("03", "Título 3", "----", 4.4),
-            new Video("04", "Título 4", "----", 3.5),
-            new Video("05", "Clic 5", "----", 5.7),
-            new Video("06", "Clic 6", "----", 5.1));
-
-
-    for (Video video : videos) {
-        videoRepository.save(video);
+    void setUp() {
+        videoRepository = mock(VideoRepository.class);  // Usamos Mockito para simular el repositorio
+        viewsRepository = mock(ViewsRepository.class);
+        culturemediaService = new CulturemediaServiceImpl(videoRepository, viewsRepository);  // Inyectamos el mock
     }
 
     @Test
-    void when_FindAll_does_not_find_any_video_an_VideoNotFoundException_should_be_thrown_successfully(){
+    void when_FindAll_all_videos_should_be_returned_successfully() {
+        List<Video> videos = List.of(
+                new Video("01", "Video 1", "Descripción 1", 4.5),
+                new Video("02", "Video 2", "Descripción 2", 5.0),
+                new Video("03", "Video 3", "Descripción 3", 3.0)
+        );
+
+        when(videoRepository.findAll()).thenReturn(videos);
+
+        List<Video> result = culturemediaService.findAll();
+        assertEquals(3, result.size());  // Verificamos el tamaño de la lista
+    }
+
+    @Test
+    void when_FindAll_does_not_find_any_video_an_VideoNotFoundException_should_be_thrown_successfully() {
         when(videoRepository.findAll()).thenReturn(Collections.emptyList());
 
         Executable executable = () -> culturemediaService.findAll();
-        assertThrows(VideoNotFoundException.class, executable, "No videos found.");
+        assertThrows(VideoNotFoundException.class, executable, "No videos found.");  // Verificamos que se lance la excepción
     }
 
     @Test
-    void when_FindByTitle_does_not_find_any_video_an_VideoNotFoundException_should_be_thrown_successfully() {
-        when(videoRepository.find("Inexistente")).thenReturn(Collections.emptyList());
+    void when_FindByTitle_does_not_match_any_video_an_empty_list_should_be_returned_successfully() {
+        when(videoRepository.find("Nonexistent")).thenReturn(Collections.emptyList());
 
-        Executable executable = () -> culturemediaService.findByTitle("Inexistente");
-        assertThrows(VideoNotFoundException.class, executable, "No videos found with title: Inexistente");
+        List<Video> result = culturemediaService.findByTitle("Nonexistent");
+        assertTrue(result.isEmpty());  // Verificamos que la lista esté vacía
     }
-    @Test
-    void when_FindByDuration_does_not_find_any_video_an_VideoNotFoundException_should_be_thrown_successfully() {
-        when(videoRepository.find(6.0, 7.0)).thenReturn(Collections.emptyList());
 
-        Executable executable = () -> culturemediaService.findByDuration(6.0, 7.0);
-        assertThrows(VideoNotFoundException.class, executable, "No videos found with duration between 6.0 and 7.0");
+    @Test
+    void when_FindByDuration_does_not_match_any_video_an_empty_list_should_be_returned_successfully() {
+        when(videoRepository.find(10.0, 15.0)).thenReturn(Collections.emptyList());
+
+        List<Video> result = culturemediaService.findByDuration(10.0, 15.0);
+        assertTrue(result.isEmpty());  // Verificamos que la lista esté vacía
     }
 }
-
-

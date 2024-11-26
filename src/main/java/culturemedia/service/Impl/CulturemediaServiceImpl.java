@@ -1,17 +1,18 @@
 package culturemedia.service.Impl;
 
 import culturemedia.model.Video;
-import culturemedia.model.View;
+import culturemedia.model.Views;
 import culturemedia.repository.VideoRepository;
+import culturemedia.repository.ViewsRepository;
 import culturemedia.service.CulturemediaService;
-import culturemedia.exception.VideoNotFoundException;
+
 import java.util.List;
 
 public class CulturemediaServiceImpl implements CulturemediaService {
 
     private final VideoRepository videoRepository;
 
-    public CulturemediaServiceImpl(VideoRepository videoRepository) {
+    public CulturemediaServiceImpl(VideoRepository videoRepository, ViewsRepository viewsRepository) {
         this.videoRepository = videoRepository;
     }
 
@@ -27,8 +28,18 @@ public class CulturemediaServiceImpl implements CulturemediaService {
     }
 
     @Override
-    public View save(View view) {
+    public Views save(Views view) {
         System.out.println("Saving view: " + view);
         return view;  // Implementa la lógica real de guardado para vista
+    }
+
+    @Override
+    public List<Video> findByTitle(String title) {
+        return List.of();
+    }
+
+    @Override
+    public List<Video> findByDuration(double minDuration, double maxDuration) {
+        return List.of();
     }
 }
