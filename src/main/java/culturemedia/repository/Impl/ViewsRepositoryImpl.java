@@ -1,4 +1,4 @@
-package culturemedia.repository.impl;
+package culturemedia.repository.Impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ public class ViewsRepositoryImpl implements ViewsRepository {
     }
 
     @Override
-    public View save(View view) {
+    public Views save(Views view) {
         this.views.add( view );
         return view;
     }
